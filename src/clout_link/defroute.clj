@@ -4,13 +4,16 @@
 
 (defn make-handler-fn
   [spec regexs method bindings body]
-  `(let [route# (clout/route-compile ~spec ~(apply hash-map regexs))]
-     (fn [request#]
-      (if-let [params# (clout/route-matches route# request#)]
-        (let [~bindings (assoc request#
-                          :route-params params#
-                          :params (merge (:params request#) params#))]
-          ~@body)))))
+  (let [real-bindings (if (vector? bindings)
+                        {{:keys bindings} :params}
+                        bindings)]
+    `(let [route# (clout/route-compile ~spec ~(apply hash-map regexs))]
+       (fn [request#]
+         (if-let [params# (clout/route-matches route# request#)]
+           (let [~real-bindings (assoc request#
+                                  :route-params params#
+                                  :params (merge (:params request#) params#))]
+             ~@body))))))
 
 
 (defmacro defroute

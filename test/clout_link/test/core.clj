@@ -17,6 +17,16 @@
     (is (nil? (handler (request :get "/some/other/url"))))
     (is (= (handler (request :get "/foo/bar-value/bla-value"))
            {:bar "bar-value"
-            :bla "bla-value"}))))
+            :bla "bla-value"})))
+
+  (let [handler (handle-my-route [bar bla]
+                                 [bar bla])]
+    (is (= (handler (request :get (url-for-my-route "bar" "bla")))
+           ["bar" "bla"])))
+  
+  (let [handler (handle-no-args _
+                                "ok")]
+    (is (= (handler (request :get "/foo")) "ok"))))
+
 
 
