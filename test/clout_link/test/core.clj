@@ -3,7 +3,11 @@
   (:use [clojure.test]
         [ring.mock.request]))
 
+(defroute no-args :get "/foo")
+
 (defroute my-route :get "/foo/:bar/:bla")
+
+
 
 (deftest test-defroute
   (is (= (url-for-my-route 1 2)

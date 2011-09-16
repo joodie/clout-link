@@ -24,19 +24,19 @@ with the values inserted."
   [parsed-route args]
   (loop [out []
          [route-head & route-rest] parsed-route
-         args args]
+         arg args]
     (if route-head
       (if (string? route-head)
         (recur (conj out route-head)
                route-rest
-               args)
+               arg)
         (if (not args)
-          (throw (Exception. "Too few arguments for route"))
-          (recur (conj out (first args))
+          (throw (Exception. (str "Too few arguments for route " (print-str parsed-route) (print-str args))))
+          (recur (conj out (first arg))
                 route-rest
-                (next args))))
-      (if args
-        (throw (Exception. "Too many arguments for route"))
+                (next arg))))
+      (if (seq arg)
+        (throw (Exception. (str "Too many arguments for route" (print-str parsed-route) (print-str args))))
         out))))
 
 (defn link-for-route
