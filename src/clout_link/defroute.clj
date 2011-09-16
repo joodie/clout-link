@@ -9,11 +9,13 @@
                         bindings)]
     `(let [route# (clout/route-compile ~spec ~(apply hash-map regexs))]
        (fn [request#]
-         (if-let [params# (clout/route-matches route# request#)]
-           (let [~real-bindings (assoc request#
-                                  :route-params params#
-                                  :params (merge (:params request#) params#))]
-             ~@body))))))
+         (if (= ~method
+                (:request-method request#))
+           (if-let [params# (clout/route-matches route# request#)]
+             (let [~real-bindings (assoc request#
+                                    :route-params params#
+                                    :params (merge (:params request#) params#))]
+               ~@body)))))))
 
 
 (defmacro defroute
