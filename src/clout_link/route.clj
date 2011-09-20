@@ -5,12 +5,15 @@
 
 (defn route
   "Make a route; method is a keyword matching request-method,
+or a set of keywords.
 spec is a ring-compatible routing string with regexs defining
 custom regex matches for the spec"
   [method spec & regexs]
   (let [p (spec/parse spec)
         out {:spec spec
-             :method method
+             :method (if (set? method)
+                       method
+                       #{method})
              :parsed-spec p
              :regexs regexs
              :clout-route (clout/route-compile spec
@@ -27,8 +30,7 @@ args are inserted into the spec."
 (defn handle
   ([route arg-f handler]
      (fn [request]
-       (if (= (:request-method request)
-              (:method route))
+       (if ((:method route) (:request-method request))
          (if-let [params (clout/route-matches (:clout-route route) request)]
            (apply handler (-> request
                               (assoc :route-params params
