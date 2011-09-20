@@ -30,3 +30,8 @@
   "Pass route-params as a seq and form-params as a map"
   [req route]
   [(fetch-route-params req route) (:form-params req)])
+
+(defn none
+  "Pass nothing"
+  [_ _]
+  [])
