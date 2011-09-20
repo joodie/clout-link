@@ -16,6 +16,12 @@
   [req route]
   [(:params req)])
 
+(defn route+params
+  "Pass route-params as a seq and params as a map"
+  [req route]
+  [(map (:route-params req) (:args route)) (:params req)])
 
-
-
+(defn route+form
+  "Pass route-params as a seq and form-params as a map"
+  [req route]
+  [(map (:route-params req) (:args route)) (:form-params req)])
