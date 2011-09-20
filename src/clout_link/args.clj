@@ -9,7 +9,7 @@
 (defn route
   "Pass route-params only as ordered arguments"
   [req route]
-  (map (:route-params req) (map name (:args route))))
+  (map (:route-params req) (:args route)))
 
 (defn params
   "Pass params map only "
