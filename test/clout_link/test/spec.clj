@@ -27,3 +27,8 @@
   (is (= (uri-for (parse "/this/:that!:my-stuff")
                   "arg1" "arg2")
          "/this/arg1!arg2")))
+
+(deftest test-params
+  (is (= (uri-for (parse "/this/:that!:my-stuff")
+                  "arg1" "arg2" {:param "value"})
+         "/this/arg1!arg2?param=value")))

@@ -1,6 +1,8 @@
 (ns clout-link.spec
   "Parsing of clout/ring-style route strings"
-  (:use [clojure.contrib.str-utils :only [re-partition]]))
+  (:use [clojure.contrib.str-utils :only [re-partition]])
+  (:require [clojure.string :as string])
+  (:import java.net.URLEncoder))
 
 (def ^{:doc "Regular expression matching variable parts of a route"}
   spec-re
@@ -39,16 +41,36 @@ with the values inserted."
         (throw (Exception. (str "Too many arguments for spec" (print-str parsed-spec) (print-str args))))
         out))))
 
+(defn- encode-params
+  "Turn a map of parameters into a urlencoded string."
+  [params]
+  (string/join "&"
+    (for [[k v] params]
+      (str (URLEncoder/encode (name k)) "="
+           (URLEncoder/encode (str v))))))
+
+
 (defn uri-for
-  "Given a route spec (string or parsed route) and arguments, return a
-url string for that route"
-  [route & args]
-  (let [parts (cond
+  "Given a route spec (string or parsed sequence) and arguments, return a
+url string for that route. Optionally takes a map of parameters to encode
+and append to the uri as the last argument."
+  [route & route-args-and-params]
+  (let [params* (last route-args-and-params)
+        has-params? (map? params*)
+        params (if has-params?
+                 params*
+                 nil)
+        route-args (if has-params?
+                     (butlast route-args-and-params)
+                     route-args-and-params)
+        parts (cond
                (or (vector? route)
                    (seq? route))
                route
-               (map? route)
-               (:parsed-spec route)
                :else
-               (parse route))]
-    (apply str (insert-args parts args))))
+               (parse route))
+        uri (apply str (insert-args parts route-args))]
+    (if has-params?
+      (str uri "?" (encode-params params))
+      uri)))
+

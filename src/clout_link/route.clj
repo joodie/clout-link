@@ -1,5 +1,6 @@
 (ns clout-link.route
   (:require [clout-link.spec :as spec]
+            [clout-link.args :as args]
             [clout.core :as clout]))
 
 (defn route
@@ -33,6 +34,6 @@ args are inserted into the spec."
                                      :params (merge (:params request) params))
                               (arg-f route)))))))
   ([route handler]
-     (handler-for route (fn [r _] r) handler)))
+     (handler-for route args/req handler)))
 
 
