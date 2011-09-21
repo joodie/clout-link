@@ -35,3 +35,13 @@
   "Pass nothing"
   [_ _]
   [])
+
+(defn method
+  "Only pass the http method"
+  [req _]
+  [(:request-method req)])
+
+(defn method+headers
+  [req _]
+  [(:request-method req) (:headers req)])
+
