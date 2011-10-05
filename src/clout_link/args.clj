@@ -2,9 +2,9 @@
   "Conversion of request/routes to function arguments")
 
 (defn- fetch-route-params
-  "Get sequence of route params for this route from the req"
+  "Get vector of route params for this route from the req"
   [req route]
-  (map (:route-params req) (:args route)))
+  (vec (map (:route-params req) (:args route))))
 
 (defn req
   "Normal ring-style; pass request as only argument"
@@ -45,3 +45,14 @@
   [req _]
   [(:request-method req) (:headers req)])
 
+(defn method+route+params
+  [req route]
+  [(:request-method req) (fetch-route-params req route) (:params req)])
+
+(defn args
+  "Specify argument keys"
+  [& keys]
+  (fn [req route]
+    (map #(if (= % :route)
+            (fetch-route-params req route)
+            (req %)) keys)))
