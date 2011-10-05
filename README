@@ -5,15 +5,24 @@ Generate uris and requests based on routes and arguments
 
 ## Usage
 
+  (use 'clout-link.defroute)
+
   (defroute my-route :get "/foo/:bar/:bla")
+
+
+  (use 'clout-link.route)
 
   (url-for my-route bar-arg bla-arg)
   => "/foo/bar-arg/bla-arg"
 
-  (def my-handler (handle my-route req
-                    (do-something-with req)))
+  (def my-handler 
+       (handle my-route
+                (fn [req] 
+                   (do-something-with req))))
 
-  (my-handler (request :my-route bar-arg bla-arg))
+  (use 'clout-link.mock)
+
+  (my-handler (request my-route bar-arg bla-arg))
 
 ## License
 
