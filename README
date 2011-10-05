@@ -1,19 +1,19 @@
 # clout-link
 
-Specify ring/clout routes separately from their handlers,
-automatically generate url-for-* functions
+Specify ring/clout routes separately from their handlers.
+Generate uris and requests based on routes and arguments
 
 ## Usage
 
   (defroute my-route :get "/foo/:bar/:bla")
 
-  (url-for-my-route bar-arg bla-arg)
+  (url-for my-route bar-arg bla-arg)
   => "/foo/bar-arg/bla-arg"
 
-  (def my-handler (handle-my-route req
+  (def my-handler (handle my-route req
                     (do-something-with req)))
 
-  (my-handler (request :get (url-for-my-route bar-arg bla-arg)))
+  (my-handler (request :my-route bar-arg bla-arg))
 
 ## License
 

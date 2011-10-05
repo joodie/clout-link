@@ -1,4 +1,4 @@
-(defproject clout-link "0.0.2-SNAPSHOT"
+(defproject clout-link "0.0.3"
   :description "Generate links based on clout route specs"
   :dependencies [[org.clojure/clojure "1.2.1"]
                  [org.clojure/clojure-contrib "1.2.0"]
