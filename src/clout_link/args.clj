@@ -49,6 +49,10 @@
   [req route]
   [(:request-method req) (fetch-route-params req route) (:params req)])
 
+(defn route+request
+  [req route]
+  [(fetch-route-params req route) req])
+
 (defn args
   "Specify argument keys"
   [& keys]
