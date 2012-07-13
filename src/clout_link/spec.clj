@@ -1,8 +1,30 @@
 (ns clout-link.spec
   "Parsing of clout/ring-style route strings"
-  (:use [clojure.contrib.str-utils :only [re-partition]])
   (:require [clojure.string :as string])
-  (:import java.net.URLEncoder))
+  (:import java.net.URLEncoder
+           java.util.regex.Pattern))
+
+(defn- re-partition
+  "Splits the string into a lazy sequence of substrings, alternating
+between substrings that match the patthern and the substrings
+between the matches. The sequence always starts with the substring
+before the first match, or an empty string if the beginning of the
+string matches.
+
+For example: (re-partition #\"[a-z]+\" \"abc123def\")
+
+Returns: (\"\" \"abc\" \"123\" \"def\")"
+  [#^Pattern re string]
+  (let [m (re-matcher re string)]
+    ((fn step [prevend]
+       (lazy-seq
+        (if (.find m)
+          (cons (.subSequence string prevend (.start m))
+                (cons (re-groups m)
+                      (step (+ (.start m) (count (.group m))))))
+          (when (< prevend (.length string))
+            (list (.subSequence string prevend (.length string)))))))
+     0)))
 
 (def ^{:doc "Regular expression matching variable parts of a route"}
   spec-re
