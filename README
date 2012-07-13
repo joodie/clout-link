@@ -26,6 +26,6 @@ Generate uris and requests based on routes and arguments
 
 ## License
 
-Copyright (C) 2011 Joost Diepenmaat, joost@zeekat.nl
+Copyright (C) 2011-2012 Joost Diepenmaat, joost@zeekat.nl
 
 Distributed under the Eclipse Public License, the same as Clojure.
