@@ -5,6 +5,8 @@
 (deftest test-route
   (let [r (route :get "/foo/:arg1/:arg2")]
     (is (= (uri-for r "test1" "test2")
-           "/foo/test1/test2"))))
+           "/foo/test1/test2"))
+    (is (= (uri-for r "test space" "test2")
+           "/foo/test%20space/test2"))))
 
 

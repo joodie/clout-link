@@ -42,6 +42,11 @@ Returns a seq of strings (constant parts) and keywords (variable parts)."
                   %)
                (re-partition spec-re spec))))
 
+(defn encode-uri-path
+  "Use rfc 3986 to encode s"
+  [s]
+  (.toASCIIString (java.net.URI. nil s nil)))
+
 (defn insert-args
   "Given a parsed spec and a seq of values, return a route vector
 with the values inserted."
@@ -91,7 +96,7 @@ and append to the uri as the last argument."
                route
                :else
                (parse route))
-        uri (apply str (insert-args parts route-args))]
+        uri (encode-uri-path (apply str (insert-args parts route-args)))]
     (if has-params?
       (str uri "?" (encode-params params))
       uri)))
